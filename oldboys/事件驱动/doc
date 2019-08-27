@@ -1,0 +1,174 @@
+
+
+IO --->
+    事件驱动 交给操作系统（自身存在一个队列） 操作系统处理完成 通过回调函数通知我
+
+协程 如何实现
+
+IO多路复用
+    用户空间 内核空间
+    进程切换
+    进程的阻塞
+    文件描述符
+    缓存I/O
+
+
+数据 先被拷贝到内核态 之后才会从内核态缓存区 拷贝到应用程序的地址空间
+            这个操作开销非常大
+    等待数据准备
+    将数据从内核考到进程中
+
+    五中网络模式方案
+
+    阻塞I/O   <blocking io>
+
+                    application         system call            kernel
+
+                    recvfrom    -------------------------> no datagram ready   wait
+                                                                                for
+                                                                   |           data
+                                                                   |
+
+    process blocks                                          datagram ready
+    in call to                                              copy datagram
+    recvfrom                                                                copy data
+                                                                   |        from kernel
+                                                                   |         to user
+                                         return   OK
+                    recvfrom    <-------------------------- copy complete
+
+
+    非阻塞I/O <unblocking io>
+    用户进程发出read操作，如果kernel没有准备好数据
+    Nonclocking I/O model
+
+                           application                           kernel        、
+                                              system call                       |
+                           recvfrom    ----------------------->  no datagram    |
+                                              EWOULDBLOCK           ready       |
+                                       <-----------------------  no datagram    |wait
+                                              system call           ready       |for
+                           recvfrom    ----------------------->  no datagram    | data
+                                              EWOULDBLOCK           ready
+                                       <-----------------------  no datagram
+                                              system call           ready
+    process repeatedly     recvfrom    ----------------------->  no datagram
+    calls recvfrom                            EWOULDBLOCK           ready
+    waiting for an OK                  <-----------------------  no datagram
+    return polling                            system call           ready
+                           recvfrom    ----------------------->     datagram
+                                                                    ready
+                                                                      |           copy data
+                                                                      |           from kernel
+                                                                      |           to users
+                                                                      |
+                                                                      |
+                            process             return ok             V
+                            datagram   <-----------------------  copy complete
+
+    用户进程不断询问kernel数据好了没有
+
+    I/O多路复用
+    selet  poll epoll 这些方式亦被称作event driven IO  不断轮训
+    监测多个socket链接  与下方的用户态与kernel无关
+    select 最多支持1024个 自己循环查找那个有数据
+    poll 去掉了最大限制
+    epoll windows不支持 linux2.6才支持
+    当存在IO操作，会告诉用户哪一个链接
+    如果用户没有操作，依旧在内核态，会每次提示你 去取
+    这个叫水平触发
+
+    边缘触发 也是在内核态存在数据 但是如果没有去取，下次不再提示
+
+    同时处理几十万socket请求  ---------->  4K大小
+    1G内存 大概十万连接
+    1G = 1024M = 1024 * 1024 KB = 2**20KB = 2**10 * 2*2 * 256
+
+                           application                          kernel
+                                            system call
+                           select    ----------------------->  no datagram
+                                                                    |
+                                                                    |
+    process blocks in                                               |
+    call to select,                                                 |
+    waiting for one of                                              |
+    possibly many sockets                                           |
+    to became readable                                              |
+                                                                    V
+                                           return readable
+                                     <-----------------------  datagram ready
+                                            system call
+                            recvfrom ------------------------>  copy datagram
+    process blocks while
+    data copied into                                                |
+    application buffer                                              |
+                                                                    |
+                                                                    V
+                            process
+                            datagram <-----------------------  copy complete
+
+    信号驱动
+
+    内核支持的并不好 实现太过复杂 用的很少
+    所谓的异步IO其实大家用的IO多路复用
+    asynio 没有大用
+    异步I/O                                  system call
+                            aio_read -------------------------> no datagram ready
+                                               return                  |
+                                     <------------------------         |
+    process continues                                                  |
+            executing                                                  |
+                                                                       |
+                                                                       V
+
+                                                                datagram ready
+
+                                                                copy datagram
+
+                                                                       |
+                                                                       |
+                                                                       |
+                                                                       |
+                                                                       V
+                          signal handler
+                          process     <-------------------------- copy complete
+                          datagram
+
+          用户进程发起read操作之后，立刻就可以开始去做其它的事。而另一方面，从kernel的角度，
+          当它受到一个asynchronous read之后，首先它会立刻返回，所以不会对用户进程产生任何block。
+          然后，kernel会等待数据准备完成，然后将数据拷贝到用户内存，
+          当这一切都完成之后，kernel会给用户进程发送一个signal，告诉它read操作完成了。
+
+       synchronous  AND asynchronous
+
+     - A synchronous I/O operation causes the requesting process to be blocked until that
+         I/O operation completes;
+     - An asynchronous I/O operation does not cause the requesting process to be blocked;
+
+    _______________________________________________________________________________________
+    |    BLOCKING    |  NONEBLOCKING  |I/O multiplexing|signal-driven I/O|ASYNCHRONOUS I/O|
+    |                |                |                |                 |                |
+    |    INITIAT     |     CHECK      |     CHECK      |                 |   INITIATE     |___
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |        |     CHECK      |       |        |                 |                |   |
+    |       |BLOCKED |     CHECK      |       v        |                 |                |   |
+    |       |        |     CHECK      |     READY      |   notification  |                |   |
+    |       |        |       |        |    INITIATE    |     INITIATE    |                |___|
+    |       |        |       |        |       |        |         |       |                |   |
+    |       |        |       |        |       |        |         |       |                |   |
+    |       |        |       |        |       |        |         |       |                |   |
+    |       |        |       |        |       |        |         |       |                |   |
+    |       v        |       v        |       v        |         v       |                |   |
+    |    COMPLETE    |    COMPLETE    |   COMPLETE     |      COMPLETE   |  notification  |___|
+    ---------------------------------------------------------------------------------------
+               1st phase handled differently                                handles both
+               2nd phase handled the same                                       phases
+               (blocked in call to recvfrom)
+
+Twised 异步网络

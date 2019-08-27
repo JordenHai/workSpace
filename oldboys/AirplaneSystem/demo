@@ -1,0 +1,349 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+#define N 999
+
+struct plane
+{
+   int num,time,sum;
+   char leave[10],arrive[10];
+}s[N];
+int i;
+int a=0;
+#define INFO "%-d%9s%9s%10d%9d\n",s[i].num,s[i].leave,s[i].arrive,s[i].time,s[i].sum
+
+struct chengke
+{
+   int dpsum;
+   int dpnum;
+   char name[10];
+}t[N];
+int I;
+int y=0;
+#define CKINFO "%s%10d%10d\n",t[I].name,t[I].dpsum,t[I].dpnum
+
+void luru1(); //录入航班信息
+void luru2();// 录入乘客信息
+void liulan();//浏览航班信息
+void chaxun();//查询航线
+void dingpiao();//订票信息
+void tuipiao();//退票信息
+void save();//保存航班信息
+void save2();//保存乘客信息
+void read();//读取航线信息
+void read2();//读取乘客信息
+
+int main()
+{
+   int number;
+   do
+   {
+
+   printf(" ◤       ************************       ◥\n");
+   printf("┃              飞机订票系统             ▕\n");
+   printf("┃        ************************       ▕\n");
+   printf("┃                                       ▕\n");
+   printf("┃          ★ 航班信息录入请按(1)       ▕\n");
+   printf("┃          ★ 航班信息浏览请按(2)       ▕\n");
+   printf("┃          ★ 查询航线请按(3)           ▕\n");
+   printf("┃          ★ 订票请按(4)               ▕\n");
+   printf("┃          ★ 退票请按(5)               ▕\n");
+   printf("┃                                       ▕\n");
+   printf(" ◣                                      ◢\n");
+   scanf("%d",&number);
+   switch(number)
+   {
+       case 1:
+         luru1();
+         break;
+      case 2:
+         liulan();
+         break;
+      case 3:
+         chaxun();
+         break;
+      case 4:
+         dingpiao();
+         break;
+      case 5:
+         tuipiao();
+         break;
+	  case 6:
+		  luru2();
+		  break;
+      case 0:;
+         break;
+   }
+   }while(number!=0);
+   printf("谢谢使用!\n");
+   return 0;
+}
+
+void luru1()//录入航班信息模块
+{
+   int c;
+    printf("请输入航班信息\n");
+   for(i=0;i<N;i++)
+   {
+      printf("请输入航班号:");
+          scanf("%d",&s[i].num);     //读取航班号
+      printf("请输入起始站:");
+         scanf("%s",&s[i].leave);  //读取起始站
+      printf("请输入终点站:");
+         scanf("%s",s[i].arrive);   //读取终点站
+      printf("请输入时间:");
+         scanf("%d",&s[i].time);    //读取时间
+      printf("请输入单张机票数额:");
+          scanf("%d",&s[i].sum);   //读取机票数额
+      a++;
+      printf("信息已经输入完成是否继续？按任意键继续，按1保存退出\n");
+      scanf("%d",&c);
+      if(c==1)
+      {
+         save();  //将结构体信息存盘
+         break;
+      }
+      }
+}
+
+void liulan() //打印模块
+{
+	char d[10];
+	read();
+	printf("航班号   起始站   终点站   时间   机票金额\n");
+	for(i=0;i<a;i++)
+	{
+		printf(INFO); //打印信息
+	}
+	printf("请按任意键回车键返回上层菜单：");
+	scanf("%s",d);
+}
+
+void chaxun()
+{
+   char name1[20];
+   char ii[20];
+   int n,no;
+   do
+   {
+      printf("请选择查找方式：\n");
+      printf("1、按航班号查找    2、按终点站查找\n");
+      printf("请选择，按其他键以回车键结束返回主菜单：");
+      scanf("%d",&n);
+      if(n==0)
+         break;
+      switch(n)
+      {
+      case 1:
+         printf("请输入航班号：");
+         scanf("%d",&no);  // 航班号
+         break;
+      case 2:
+         printf("请输入终点站名称：");
+         scanf("%s",name1);
+         break;
+      }
+      read(); //调用读取函数
+      for (i=0;i<a;i++)
+      {
+         if(strcmp(s[i].arrive,name1)==0) //按终点站判断
+         {
+            printf("航班号   起始站    终点站    时间    机票价格\n");
+            printf(INFO);//打印信息
+            break;
+         }
+         if(s[i].num==no)//按航班号判断输出条件
+         {
+            printf("航班号   起始站    终点站    时间     机票价格\n");
+            printf(INFO);//打印信息
+            break;
+         }
+      }
+         no=5;//将航班号赋值为0
+         printf("没有您需要的信息或查找完毕：\n"
+            "是否继续查找？请输入Y或N以回车键结束");
+            scanf("%s",ii);
+      }while(strcmp(ii,"Y")==0);
+}
+
+void luru2()
+{
+   int c;
+   printf("请输入乘客信息\n");
+   for(I=0;I<N;I++)
+   {
+      printf("请输入姓名：",y);
+      scanf("%s",t[I].name);
+      printf("请输入订票数目：",y);
+      scanf("%d",&t[I].dpsum);
+      printf("请输入所订航班：",y);
+      scanf("%d",&t[I].dpsum );
+      y++;
+      printf("第%d个乘客信息已经输入完成是否继续，按1保存退出\n");
+      scanf("%d",&c);
+      if(c==1)
+      {
+         save2();
+         break;
+      }
+   }
+
+
+}
+
+void dingpiao()
+{
+   int n;
+   char e[10],na[10];
+   do
+   {
+      printf("请输入您的姓名以回车键结束：");
+      read2();
+      scanf("%s",na);
+      for(I=0;I<y;I++)
+      {
+         if(t[I].name,na==0)
+            printf("姓名    订票数量    所定航班\n");
+             printf(CKINFO);
+      }
+      chaxun();
+      printf("请输入您要订的机票数以回车键结束：");
+      scanf("%d",&n);
+      if(n<0)
+      {
+         printf("请输入有效机票数\n");
+         break;
+      }
+      if(s[i].sum!=0&&s[i].sum>=n)
+      {
+         read2();
+         t[I].dpsum=t[I].dpsum+n;
+         t[I].dpnum=s[i].num;
+         save2();
+         s[i].sum=s[i].sum-n;
+         save();//调用保存函数
+         printf("订票成功!\n");
+         break;
+      }
+      if(s[i].sum<n)
+        {
+         printf("请输入有效机票数：");
+         break;
+      }
+      printf("是否继续？请输入Y或N以回车键结束\n");//判断是否继续订票
+      scanf("%s",e);
+   }while(!strcmp(e,"Y"));
+}
+
+void tuipiao()
+{
+   int n;
+   char f[10];
+   do
+   {
+      chaxun();
+      printf("请输入您要退的机票数目：\n");
+      scanf("%d",&n);
+      if(n<0)
+         printf("请输入有效的机票数!\n");
+         s[i].sum=s[i].sum+n;
+         save();
+         printf("退票成功!\n");
+         printf("是否继续？请输入Y或N以回车键结束\n");
+         scanf("%s",&f);
+      }while(!strcmp(f,"Y"));
+      getchar();
+}
+
+void save()
+{
+   FILE *fp,*fp1;//定义文件指针
+   if((fp=fopen("1.dat","wb"))==NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   if((fp1=fopen("2.dat","wb"))==NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   for(i=0;i<a;i++)
+      if(fwrite(&s[i],sizeof(struct plane),1,fp)==0)// 向文件输入数据，并判断是否出错
+        printf("向文件输入数据失败!\n");
+      fprintf(fp1,"%d",a);
+      fclose(fp);
+      fclose(fp1);
+}
+
+void save2()
+{
+   FILE *fp,*fp1;
+   if((fp=fopen("3.dat","wb"))==NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   if((fp1=fopen("4.dat","wb"))=NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   for(I=0;I<y;I++)
+      if(fwrite(&t[I],sizeof(struct chengke),1,fp)==0)
+         printf("向文件输入数据失败!\n");
+      fprintf(fp1,"%d",y);
+      fclose(fp);
+      fclose(fp1);
+}
+
+void read()
+{
+   FILE *fp,*fp1;
+   if((fp=fopen("1.dat","rb"))==NULL)
+   {
+      printf("出错，请检查文件是否存在，按任意键返回主菜单");
+      getchar();
+   }
+   if((fp1=fopen("2.dat","rb"))==NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   fscanf(fp1,"%d",&a);
+   fclose(fp1);
+   for(i=0;i<a;i++)
+   {
+      fread(&s[i],sizeof(plane),1,fp);
+   }
+   fclose(fp);
+}
+
+void read2()
+{
+    FILE *fp,*fp1;
+   if((fp=fopen("3.dat","rb"))==NULL)
+   {
+      printf("出错，请检查文件是否存在，按任意键返回主菜单");
+      getchar();
+   }
+   if((fp1=fopen("4.dat","rb"))==NULL)
+   {
+      printf("创建文件失败!\n");
+      getchar();
+      return;
+   }
+   fscanf(fp1,"%d",&y);
+   fclose(fp1);
+   for(I=0;I<y;I++)
+   {
+      fread(&t[I],sizeof(chengke),1,fp);
+   }
+   fclose(fp);
+}

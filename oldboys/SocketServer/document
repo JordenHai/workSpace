@@ -1,0 +1,45 @@
+主要使用前两种
+TcpServer
+    This uses the Internet Tcp
+
+UdpServer
+    This uses the Internet Udp
+
+UnixStreamServer
+
+UnixDatagramServer
+
+BaseServer
+     |
+     |
+     ˇ
+TcpServer ——————> UnixStreamServer
+     |
+     |
+     ˇ
+UdpServer ——————> UnixDatagramServer
+
+
+First YOU MUST CREATE A REQUEST HANDLER CLASS BY THE SUBCLASSING THE BaseRequestHandler class
+and overriding its handle()
+
+你必须自己重建请求处理类，并且继承自BaseRequestHandler，并且重写handler方法
+
+Second ,you must instantiate one of the server classes,passing it the server's address and
+the request handler class
+
+你必须实例化TCPsever 并且传递server ip and 第一步的创建的请求处理类 给 这个TCPServer
+
+Then you can call the handler_request() or server_forever() method of the server object to process
+one or many request
+
+server.handle_request() #处理一个请求
+server.server_forever() #处理多个请求 ，永远执行
+
+finally call server_close() to close the socket.
+
+Base
+
+    self.setup()
+    self.handle()
+    self.finally（）

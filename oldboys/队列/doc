@@ -1,0 +1,21 @@
+RabbitMQ 消息队列
+    queue 只能在python内部搞
+        和queue干的事情差不多 传递消息 单线程的
+        threading QUEUE  不能跨线程
+        multiprocess进程QUEUE
+        父进程与子进程进行交互 或则同属于同一父进程下的多个子进程进行交互
+    中间代理就是RabbitMQ，ZeroMQ，activeMQ
+
+openstack 全是RabbitMQ提供的消息队列
+
+    elang 
+Redis
+    每秒读取速度 几万/s
+    效率无敌
+    都是缓存系统
+        mongodDB
+        redis
+        memcache
+
+Mysql
+

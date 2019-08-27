@@ -1,0 +1,234 @@
+html  ==  赤裸裸的人
+css   ==  给人穿了衣服
+js    ==  想怎么动 就怎么动
+
+- HTML
+    - 20个左右的标签
+    - 一套规则，浏览器可以解析的
+        - 学习html文件格式(充当模板)
+        - 数据库获取数据 替换指定位置(Web 框架)
+        - 标签存在的意义
+            - 定位内容
+            - 进行操作
+    - 本地测试
+        - 找到文件路径 直接浏览器打开
+        - pycharm直接打开
+    - 标签分类
+        - 自闭和标签
+            - 非常少
+        - 非自闭和标签
+    - head标签
+        - <meta -> 编码 跳转 刷新 关键字 描述 IE兼容
+        - <meta http-equiv="X-UA-Compatible" content="IE=IE9;IE=IE8;IE=IE7;IE=IE6;"/>
+        - title标签
+            - <title>string.....</title>
+        - link
+            - <link />
+                - <link rel="shortcut icon" href="image/favicon.ico">
+                - <link rel="" href="">
+        - style
+            - <style />
+        - script    
+            - <script />
+
+    - body标签<20个左右>
+        - 标签分类
+            - 块级标签
+                - h系列 
+                    - 加大加粗
+                - p标签
+                    - 段落间存在间距
+                - div标签(白板)
+                    - 需要自定义特性
+           
+            - 行内标签(内联标签)
+                - span(白板)
+                    - 需要自定义特性
+                
+        
+        - p段落
+        - br换行
+            -自闭和
+        - h标题
+            - <h1> 标题最大
+            - <h2>
+            - <h3>
+            - <h4>
+            - <h5>
+            - <h6> 标题最小
+        - div标签
+            - 段落标签
+        - span标签
+            -
+
+        - input
+            - input type = 'text' 
+                - name = '' 
+                - value = '' 设置默认值
+            - input type = 'password' 
+                - name = ''
+                - value = ''
+            - input type = 'submit' 
+                - value = ''
+                - name = ''
+            - input type = 'button' 
+                - value = ' '
+                - name = ''
+            - input type = 'checkbox'
+                - 复选框 name也相同
+                - name = '' 
+                - value = ''
+                - checked = "checked"
+            - input type = 'radio'
+                - 一般单选框 name相同 互斥 value设置选项值
+                - name = '' 
+                - value = ''
+                - checked = "checked" 设置默认值
+            - input type = 'file'
+                - 依赖form表单的属性 enctype="multipart/form-data"
+                - 这个属性表示将文件分块发送给服务器端
+                - name = ''
+                - value = ''
+            - input type = 'reset'
+                - 重置
+        
+        - form
+            - action = 'url =...' method = 'GET' or 'POST'
+        
+        - textarea
+            - 默认值放中间
+            - 文本框
+        - select 
+            - name = ''
+            - multipart = 'multipart'
+            - size = ''
+            - option<>
+                - <option value = ''> </option>
+            - 下拉菜单
+        - a
+            - 跳转
+            - 锚点 <div id='num' style='hight:800px'> <a href='#num'></a>
+        - <a href="http://www.baidu.com">li</a>
+            -
+        - img
+            - src = ""
+            - title = ""
+            - alt = ""
+        
+        - list
+            - ul
+                - li
+            - ol
+                - li
+            - dl
+                - dd
+                - dt
+        - table
+            - <tr> 
+                -<td> </td>
+                -<td> </td>
+                -<td> <a> </a></td>
+            - </tr>  
+
+            - <thead>
+                - <th> </th>
+                - <th> </th>
+            - </thead>
+            - <tbody>
+                - <tr> 
+                    -<td> </td>
+                    -<td> </td>
+                    -<td> <a> </a></td>
+                - </tr> 
+            - </tbody>
+
+            - 合并单元格
+                - <td> 
+                    - colspan 横向 = 多少 占据几个
+                    - rowspan 纵向 = 多少 占据几个
+
+
+        - label
+            -  <label for="username">用户名</label>
+            -  <input id="username" type="text" name="user">
+            -  点击文字获取关联的
+        - fieldset
+            - <fieldset>
+            - <legend>
+            -    登陆
+            - </legend>
+            - <label for="username">用户名</label>
+            - <input id="username" type="text" name="user">
+            - <br />
+            - <label for="passwd">密码</label>
+            - <input id="passwd" type="text" name="user">
+            - <br />
+            - </fieldset>
+- CSS  
+    - 颜色
+    - 位置
+    - ....
+
+- JS 
+    
+    JSON.stringify  将对象转换为字符串
+    JSON.parse()    将字符串转换成对象类型
+
+    转义
+        url = https://www.sougou.com/web?query="理解"
+        decodeURI()
+        url = https://www.sougou.com/web?query=%E7%90%86%E8%A7%A3
+        decodeURIComponent()
+        url = https%3A%2F%2Fwww.sougou.com%2Fweb%3Fquery%3D%E7%90%86%E8%A7%A3
+        encodeURI()
+        encodeURIComponent()
+    客户端 <=========================> 服务器端
+    cookie
+
+    将数据进行转义之后 保存到本地
+
+    14、JavaScript面向对象
+        function foo(){
+            var xo = 'alex'
+        }
+
+        function foo(name){
+            this.name = name;
+            this.sayName= function(){
+                console.log(this.name);
+            } 
+        }
+
+        方法区：
+
+        this 代指对象
+    
+        var obj = new foo('alex');
+
+        function foo(n){
+            this.name = n;
+        }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

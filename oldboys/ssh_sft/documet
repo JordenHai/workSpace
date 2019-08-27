@@ -1,0 +1,19 @@
+
+
+
+
+10.0.0.31  ------------>   10.0.0.41
+私钥                          公钥
+
+
+ssh-keygen
+
+ssh-copy-id "-p端口 root@ip "
+
+
+10.20.223.198                  10.20.224.79
+private key                     public key
+ssh gao-03@10.20.224.79
+
+public key                      private key
+                                ssh mimic@10.20.223.198

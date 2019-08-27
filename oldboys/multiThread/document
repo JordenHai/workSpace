@@ -1,0 +1,63 @@
+
+
+进程：qq要以一个整体的形式暴露给操作系统进行系统管理
+                里面会包含对各种资源的调用 内存管理 网络接口的调用 等
+                以线程的形式进行调度
+                对各种资源的管理的集合 就可以成为 进程
+
+线程：是一串指令 是操作系统的最小的调度单位 是一串指令的集合
+
+进程 要操作cpu必须要创建一个线程
+
+context 上下文  all the information that the cpu needs to execute
+
+线程 就是cpu执行时 所需要的资源集合
+
+线程 是 上下文的执行指令
+
+一个进程 就是一个屋子内部资源的集合
+
+
+all the threads in a process hava the same view of the memory
+
+同一个进程里的线程共享同一块内存空间
+
+
+
+An executing instance of a program is called a process.
+Each process provides the resources needed to execute a program.
+A process has a virtual address space, executable code, open handles to system objects,
+a security context, a unique process identifier, environment variables, a priority class,
+minimum and maximum working set sizes, and at least one thread of execution.
+Each process is started with a single thread, often called the primary thread,
+but can create additional threads from any of its threads.
+
+每个进程开始都会自动启动一个线程 primary thread主线程
+
+但是可以创建额外的线程
+oldboy5 1：00
+Threads share the address space of the process that created it;
+processes have their own address space.
+线程共享内存空间   进程的内存是独立的
+Threads have direct access to the data segment of its process;
+processes have their own copy of the data segment of the parent process.
+子进程 是完全独立的
+子线程 共享数据
+Threads can directly communicate with other threads of its process;
+同一进程下的不同线程之间直接交流数据
+processes must use interprocess communication to communicate with sibling processes.
+两个进程之间的通信 必须通过一个中间代理 例如 信号量 锁
+New threads are easily created;
+new processes require duplication of the parent process.
+新的线程容易创建
+新的进程需要  父进程的副本
+Threads can exercise considerable control over threads of the same process;
+processes can only exercise control over child processes.
+一个线程 可以控制和操作同一进程中的其他线程
+但是进程只能操作子进程
+Changes to the main thread (cancellation, priority change, etc.)
+may affect the behavior of the other threads of the process;
+changes to the parent process does not affect child processes.
+对于主线程的修改 有可能 会影响其他线程的运行
+对父进程的影响不会影响子进程
+

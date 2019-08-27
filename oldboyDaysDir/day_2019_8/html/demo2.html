@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>new demo</title>
+</head>
+<body>
+    <p>
+        <!--表单-->
+        <!--get 会把提交的数据拼接到url上-->
+        <!--一个请求包括 请求头和内容-->
+        <!--GET : 放入请求头 -->
+        <!--POST: 放入内容中 -->
+        <!--只是请求的内容放的位置不同-->
+        <form action="http://localhost:8888/index" method="get">
+            <span >账号：</span>
+            <input type="text" name="user"/>
+            <span>密码：</span>
+            <input type="password" name="passwd"/>
+            <input type="button" value="登陆 "/>
+            <input type="submit" value="登陆"/>
+            <!--{ 'user':'xx',
+                  'passwd:'xx'}-->
+        </form>
+        <br />
+         <!--表单-->
+        <form>
+            <span>账号：</span>
+            <input type="text"/>
+            <span>密码：</span>
+            <input type="password"/>
+            <input type="button" value="登陆"/>
+            <input type="submit" value="登陆"/>
+        </form>
+    </p>
+</body>
+</html>
